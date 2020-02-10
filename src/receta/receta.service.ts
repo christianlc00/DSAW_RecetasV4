@@ -1,8 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Receta } from './interfaces/receta.interface';
 
 @Injectable()
 export class RecetaService {
-    getRecetas(): string {
-        return 'Hello World!';
-      }
+    constructor(@InjectModel('Receta')
+    private readonly recetaModel: Model<Receta>) { }
+
+    async listar(): Promise<Receta[]> {
+        return await this.recetaModel.find().exec();
+    }
+
+    async listarId(id: string): Promise<Receta[]> {
+        return await this.recetaModel.findById(id).exec();
+    }
 }
